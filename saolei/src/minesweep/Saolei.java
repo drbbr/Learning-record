@@ -12,7 +12,7 @@ public class Saolei implements ActionListener {
     int ROW =17;
     int COL =30;
     int MINES=99;
-    int unopen=99;
+    int unopen=MINES;
     int opend=0;
     int seconds=0;
     boolean flag=false;
@@ -28,6 +28,7 @@ public class Saolei implements ActionListener {
     JButton face=null;
     JLabel count=new JLabel("剩余数量: "+unopen);
     JLabel timer=new JLabel("时间:"+seconds+"s");
+
     JButton[][] btns=new JButton[ROW][COL];
     Timer times=new Timer(1000,this);
 
@@ -49,10 +50,8 @@ public class Saolei implements ActionListener {
         cry.setImage(cry.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
         lei.setImage(lei.getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT));
         flower.setImage(flower.getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT));
-
         setBanner();
         initMines();
-
         frame.setVisible(true);
     }
 
@@ -62,7 +61,6 @@ public class Saolei implements ActionListener {
         con.setSize(1050, 595);
         con.setLayout(new GridLayout(ROW,COL));
         initMine();
-
         for (int i=0;i<ROW;i++)
         {
             for (int j=0;j<COL;j++)
@@ -73,9 +71,8 @@ public class Saolei implements ActionListener {
                 b.setEnabled(true);
                 b.setFocusPainted(false);
                 b.setFont(new Font("黑体", Font.BOLD, 18));
-                
-
                 b.setBorder(BorderFactory.createRaisedBevelBorder());
+
                 b.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -107,9 +104,6 @@ public class Saolei implements ActionListener {
             }
         }
         frame.getContentPane().add(con,BorderLayout.CENTER);
-
-
-
     }
 
     private void initMine(){
@@ -199,15 +193,12 @@ public class Saolei implements ActionListener {
             times.start();
             flag=true;
         }
-
         JButton b=(JButton)e.getSource();
 		if(b.equals(face))
         {
             restart();
             return;
         }
-
-
 	}
 
 
@@ -243,10 +234,6 @@ public class Saolei implements ActionListener {
                             mines[i][j].isFlag=true;
                             unopen--;
                             count.setText("剩余数量: "+unopen);
-                            if(opend+unopen==ROW*COL)
-                            {
-                                ifWin();
-                            }
                         }
                         else {
                             //去旗
@@ -278,7 +265,12 @@ public class Saolei implements ActionListener {
                             if(j-1>-1&&i-1>-1)     openCell(i-1,j-1);
                             if(i+1<ROW&&j-1>-1)    openCell(i+1,j-1);
                             if(j+1<COL&&i-1>-1)    openCell(i-1,j+1);
-                        }}
+                        }
+                            if(opend+MINES==ROW*COL)
+                            {
+                                ifWin();
+                            }
+                        }
                         return;
                     }
                 }
